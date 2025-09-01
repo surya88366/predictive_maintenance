@@ -3,7 +3,11 @@ import pickle
 import numpy as np
 
 app = Flask(__name__)
-model = pickle.load(open('src/model.pkl', 'rb'))
+import os
+model_path = os.path.join(os.path.dirname(__file__), 'model.pkl')
+with open(model_path, 'rb') as f:
+    model = pickle.load(f)
+
 appliance_map = {'fan': 0, 'ac': 1, 'washing_machine': 2}
 
 @app.route('/predict', methods=['POST'])
