@@ -1,0 +1,28 @@
+# src/model_training.py (also generates data)
+import pandas as pd
+import numpy as np
+import pickle
+
+np.random.seed(42)
+appliances = ['fan', 'ac', 'washing_machine']
+rows = []
+
+for appliance in appliances:
+    for _ in range(500):
+        fault = np.random.rand() < 0.1
+        if appliance == 'fan':
+            vib = np.random.normal(40, 5) if not fault else np.random.normal(70, 10)
+            temp = np.random.normal(35, 2) if not fault else np.random.normal(50, 5)
+            curr = np.random.normal(1.2, 0.2) if not fault else np.random.normal(2.5, 0.3)
+        elif appliance == 'ac':
+            vib = np.random.normal(30, 3) if not fault else np.random.normal(60, 8)
+            temp = np.random.normal(22, 1.5) if not fault else np.random.normal(35, 4)
+            curr = np.random.normal(3.5, 0.5) if not fault else np.random.normal(5.0, 0.7)
+        else:
+            vib = np.random.normal(60, 10) if not fault else np.random.normal(90, 15)
+            temp = np.random.normal(40, 3) if not fault else np.random.normal(55, 5)
+            curr = np.random.normal(2.0, 0.4) if not fault else np.random.normal(3.5, 0.6)
+        rows.append([appliance, vib, temp, curr, int(fault)])
+
+df = pd.DataFrame(rows, columns=['appliance', 'vibration', 'temperature', 'current', 'needs_service'])
+df.to_csv('data/synthetic_data.csv', index=False)
